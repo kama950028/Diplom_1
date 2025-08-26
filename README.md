@@ -1,4 +1,4 @@
-# Diplom_1 — Автотесты (JUnit4, REST Assured, Allure)
+# Diplom_1 — Автотесты (JUnit4, REST Assured, JaCoCo)
 
 Этот проект реализует автотесты на **Java 11** с использованием **JUnit4**, **REST Assured**.  
 Сборка и управление зависимостями — **Maven**.
