@@ -1,32 +1,86 @@
 package praktikum.tests;
 
-import org.junit.*;
+import org.junit.Test;
 import praktikum.*;
 
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class BurgerMoveEdgeTest {
 
     @Test
-    public void move_fromStartToEnd_and_backTest() {
+    public void moveFromStartToEndOnceTest() {
         Burger burger = new Burger();
-        burger.setBuns(new Bun("Булка", 1f));
 
-        Ingredient i0 = new Ingredient(IngredientType.SAUCE, "S0", 1f);
-        Ingredient i1 = new Ingredient(IngredientType.FILLING, "F1", 1f);
-        Ingredient i2 = new Ingredient(IngredientType.SAUCE, "S2", 1f);
+        // Bun as mock
+        Bun bun = mock(Bun.class);
+        when(bun.getName()).thenReturn("Булка");
+        when(bun.getPrice()).thenReturn(1f);
+        burger.setBuns(bun);
 
-        burger.addIngredient(i0);
-        burger.addIngredient(i1);
-        burger.addIngredient(i2);
+        // Ingredients as mocks (no magic numbers in names)
+        Ingredient sauceFirst = mock(Ingredient.class);
+        when(sauceFirst.getType()).thenReturn(IngredientType.SAUCE);
+        when(sauceFirst.getName()).thenReturn("SpicySauce");
+        when(sauceFirst.getPrice()).thenReturn(1f);
 
-        // 0,1,2 -> перемещаем 0 в конец: 1,2,0
+        Ingredient filling = mock(Ingredient.class);
+        when(filling.getType()).thenReturn(IngredientType.FILLING);
+        when(filling.getName()).thenReturn("BeefFilling");
+        when(filling.getPrice()).thenReturn(1f);
+
+        Ingredient sauceSecond = mock(Ingredient.class);
+        when(sauceSecond.getType()).thenReturn(IngredientType.SAUCE);
+        when(sauceSecond.getName()).thenReturn("MildSauce");
+        when(sauceSecond.getPrice()).thenReturn(1f);
+
+        burger.addIngredient(sauceFirst);
+        burger.addIngredient(filling);
+        burger.addIngredient(sauceSecond);
+
+        // 0,1,2 -> move index 0 to index 2 => 1,2,0
         burger.moveIngredient(0, 2);
-        assertThat(burger.ingredients, contains(i1, i2, i0));
 
-        // 1,2,0 -> перемещаем 2 в начало: 0,1,2
+        // one test — one assertion
+        assertThat(burger.ingredients, contains(filling, sauceSecond, sauceFirst));
+    }
+
+    @Test
+    public void moveFromEndToStartOnceTest() {
+        Burger burger = new Burger();
+
+        // Bun as mock
+        Bun bun = mock(Bun.class);
+        when(bun.getName()).thenReturn("Булка");
+        when(bun.getPrice()).thenReturn(1f);
+        burger.setBuns(bun);
+
+        // Ingredients as mocks
+        Ingredient sauceFirst = mock(Ingredient.class);
+        when(sauceFirst.getType()).thenReturn(IngredientType.SAUCE);
+        when(sauceFirst.getName()).thenReturn("SpicySauce");
+        when(sauceFirst.getPrice()).thenReturn(1f);
+
+        Ingredient filling = mock(Ingredient.class);
+        when(filling.getType()).thenReturn(IngredientType.FILLING);
+        when(filling.getName()).thenReturn("BeefFilling");
+        when(filling.getPrice()).thenReturn(1f);
+
+        Ingredient sauceSecond = mock(Ingredient.class);
+        when(sauceSecond.getType()).thenReturn(IngredientType.SAUCE);
+        when(sauceSecond.getName()).thenReturn("MildSauce");
+        when(sauceSecond.getPrice()).thenReturn(1f);
+
+        burger.addIngredient(sauceFirst);
+        burger.addIngredient(filling);
+        burger.addIngredient(sauceSecond);
+
+        // 0,1,2 -> 1,2,0 -> move index 2 to index 0 => 0,1,2
+        burger.moveIngredient(0, 2);
         burger.moveIngredient(2, 0);
-        assertThat(burger.ingredients, contains(i0, i1, i2));
+
+        // one test — one assertion
+        assertThat(burger.ingredients, contains(sauceFirst, filling, sauceSecond));
     }
 }
