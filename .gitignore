@@ -1,0 +1,13 @@
+# Игнорируем весь target
+target/*
+
+# Разрешаем только JUnit-отчёты
+!target/surefire-reports/
+!target/surefire-reports/**
+
+# IDE / инструменты
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.mvn/
